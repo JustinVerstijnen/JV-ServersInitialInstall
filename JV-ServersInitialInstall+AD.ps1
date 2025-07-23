@@ -1,4 +1,4 @@
-# Justin Verstijnen Server Initial Installation script
+# Justin Verstijnen Server Initial Installation script + Installation of Active Directory Forest
 # Github page: https://github.com/JustinVerstijnen/JV-ServersInitialInstall
 # Let's start!
 Write-Host "Script made by..." -ForegroundColor DarkCyan
@@ -11,7 +11,7 @@ Write-Host "     _           _   _        __     __            _   _  _
 
                                                        
 # === PARAMETERS ===
-$logFile = Join-Path -Path $PSScriptRoot -ChildPath "JV-ServersInitialInstall-Log_$(Get-Date -Format dd-MM-yyyy).txt"
+$logFile = Join-Path -Path $PSScriptRoot -ChildPath "JV-ServersInitialInstall+AD-Log_$(Get-Date -Format dd-MM-yyyy).txt"
 $TimeZoneToSet = "W. Europe Standard Time"  # Example: Amsterdam (UTC+1/UTC+2 DST)
 $culture = "nl-NL"
 $geoid = "176" #  Check this page: https://learn.microsoft.com/en-us/windows/win32/intl/table-of-geographical-locations
