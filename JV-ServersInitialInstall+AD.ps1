@@ -16,7 +16,7 @@ $TimeZoneToSet = "W. Europe Standard Time"  # Example: Amsterdam (UTC+1/UTC+2 DS
 $culture = "nl-NL"
 $geoid = "176" #  Check this page: https://learn.microsoft.com/en-us/windows/win32/intl/table-of-geographical-locations
 $DomainName = "internal.justinverstijnen.nl"
-$SafeModePwd = "Jemoeder69"  # DSRM wachtwoord (hardcoded)
+$SafeModePwd = "XPa$$W0rd!24"  # DSRM wachtwoord (hardcoded)
 $DomainNetbiosName = "JV-INT"
 # === END PARAMETERS ===
 
