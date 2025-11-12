@@ -1,3 +1,18 @@
+<#PSScriptInfo
+
+.VERSION 1.0.0
+.GUID 8430b589-3be3-4a6e-9340-8f3eb36da0ed
+.AUTHOR Justin Verstijnen
+.COMPANYNAME JustinVerstijnen
+.COPYRIGHT (c) 2025 Justin Verstijnen. All rights reserved.
+.TAGS PowerShell, Script, Server, Install
+.PROJECTURI https://github.com/JustinVerstijnen/JV-ServersInitialInstall
+.RELEASENOTES First publish.
+.DESCRIPTION This script is for the initial installation and configuration of Windows Azure VMs. It sets some cool settings and enables to set the correct timezone when not in UTC/Zulu timezone.
+.LICENSEURI https://opensource.org/licenses/MIT
+
+#>
+
 # Justin Verstijnen Server Initial Installation script
 # Github page: https://github.com/JustinVerstijnen/JV-ServersInitialInstall
 # Let's start!
