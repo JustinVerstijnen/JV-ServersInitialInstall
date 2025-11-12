@@ -13,7 +13,7 @@ jobs:
     runs-on: windows-latest
 
     env:
-      # Variables (change this to your script)
+      # Variables (change this to your script).
       SCRIPT_NAME: JV-ServersInitialInstall
       SCRIPT_PATH: ./JV-ServersInitialInstall.ps1
       DISPLAY_NAME: JV-ServersInitialInstall
