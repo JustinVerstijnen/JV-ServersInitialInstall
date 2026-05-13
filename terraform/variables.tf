@@ -99,9 +99,36 @@ variable "image_version" {
   type        = string
 }
 
-variable "rdp_source_address_prefix" {
-  description = "Source IP address prefix allowed for RDP. Preferably set this to your own public IP address with /32."
+variable "rdp_source_address_prefixes" {
+  description = "Source IP address prefixes allowed for RDP. Preferably use public IP addresses with /32, for example [\"203.0.113.10/32\", \"203.0.113.11/32\"]."
+  type        = list(string)
+
+  validation {
+    condition     = length(var.rdp_source_address_prefixes) > 0
+    error_message = "At least one RDP source address prefix must be provided."
+  }
+}
+
+variable "bootstrap_script_url" {
+  description = "Public raw URL to the bootstrap PowerShell script, for example a raw.githubusercontent.com URL."
   type        = string
+
+  validation {
+    condition     = can(regex("^https://", var.bootstrap_script_url))
+    error_message = "The bootstrap_script_url must start with https://."
+  }
+}
+
+variable "bootstrap_script_file_name" {
+  description = "The file name of the bootstrap script after it is downloaded by the Custom Script Extension. Keep this aligned with the script URL file name."
+  type        = string
+  default     = "bootstrap-dc.ps1"
+}
+
+variable "bootstrap_script_version" {
+  description = "Manual version value used to force the Custom Script Extension to run again after changing the GitHub-hosted script. Increase this value when needed."
+  type        = string
+  default     = "1"
 }
 
 variable "time_zone" {

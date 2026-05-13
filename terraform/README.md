@@ -2,6 +2,8 @@
 
 This project deploys a Windows Server VM in Azure and promotes it to a new Active Directory Domain Controller.
 
+The PowerShell bootstrap script is downloaded by the Azure Custom Script Extension from a public GitHub raw URL. No Azure Storage Account is created for the script in this version.
+
 ## Project structure
 
 ```text
@@ -30,6 +32,7 @@ OS disk:        osdisk-jv-<project>
 VNET:           vnet-jv-<project>
 NIC:            nic-jv-<project>
 Public IP:      pip-jv-<project>
+NSG:            nsg-jv-<project>
 ```
 
 Default AD forest name:
@@ -42,6 +45,58 @@ Default internal IP:
 
 ```text
 10.69.0.4
+```
+
+## GitHub script hosting
+
+1. Create a public GitHub repository.
+2. Upload this file to the repository:
+
+```text
+scripts/bootstrap-dc.ps1
+```
+
+3. Open the file in GitHub.
+4. Click **Raw**.
+5. Copy the raw URL.
+6. Paste it in `terraform.tfvars`:
+
+```hcl
+bootstrap_script_url = "https://raw.githubusercontent.com/<owner>/<repo>/main/scripts/bootstrap-dc.ps1"
+```
+
+Keep this value aligned with the actual file name:
+
+```hcl
+bootstrap_script_file_name = "bootstrap-dc.ps1"
+```
+
+When you change the script after a deployment and want the Custom Script Extension to run again, increase this value:
+
+```hcl
+bootstrap_script_version = "2"
+```
+
+For first-time deployment this does not matter; the extension runs during VM creation.
+
+## RDP source IP allow list
+
+RDP is not opened to the entire internet by default. Configure the allowed source IP addresses in `terraform.tfvars`:
+
+```hcl
+rdp_source_address_prefixes = ["203.0.113.10/32", "203.0.113.11/32"]
+```
+
+For a single public IP address:
+
+```hcl
+rdp_source_address_prefixes = ["203.0.113.10/32"]
+```
+
+Temporary lab-only option:
+
+```hcl
+rdp_source_address_prefixes = ["*"]
 ```
 
 ## Requirements
@@ -62,7 +117,8 @@ Install these tools on your workstation:
    - `subscription_id`
    - `admin_password`
    - `safe_mode_password`
-   - `rdp_source_address_prefix`
+   - `bootstrap_script_url`
+   - `rdp_source_address_prefixes`
 5. Open a terminal in Visual Studio Code.
 6. Sign in to Azure:
 

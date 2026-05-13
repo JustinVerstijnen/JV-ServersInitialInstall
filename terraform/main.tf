@@ -51,19 +51,7 @@ resource "azurerm_network_security_group" "nsg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "3389"
-    source_address_prefix      = var.rdp_source_address_prefix
-    destination_address_prefix = "*"
-  }
-
-  security_rule {
-    name                       = "Allow-ICMP"
-    priority                   = 1010
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Icmp"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = var.rdp_source_address_prefix
+    source_address_prefixes    = var.rdp_source_address_prefixes
     destination_address_prefix = "*"
   }
 }
@@ -87,44 +75,6 @@ resource "azurerm_network_interface" "nic" {
 resource "azurerm_network_interface_security_group_association" "nic_nsg" {
   network_interface_id      = azurerm_network_interface.nic.id
   network_security_group_id = azurerm_network_security_group.nsg.id
-}
-
-############################################################
-# STORAGE FOR CUSTOM SCRIPT EXTENSION
-############################################################
-
-resource "random_string" "storage_suffix" {
-  length  = 10
-  upper   = false
-  lower   = true
-  numeric = true
-  special = false
-}
-
-resource "azurerm_storage_account" "scripts" {
-  name                            = "stjv${random_string.storage_suffix.result}"
-  resource_group_name             = azurerm_resource_group.rg.name
-  location                        = azurerm_resource_group.rg.location
-  account_tier                    = "Standard"
-  account_replication_type        = "LRS"
-  min_tls_version                 = "TLS1_2"
-  allow_nested_items_to_be_public = false
-  tags                            = var.tags
-}
-
-resource "azurerm_storage_container" "scripts" {
-  name                  = "scripts"
-  storage_account_id    = azurerm_storage_account.scripts.id
-  container_access_type = "private"
-}
-
-resource "azurerm_storage_blob" "bootstrap" {
-  name                   = local.bootstrap_blob_name
-  storage_account_name   = azurerm_storage_account.scripts.name
-  storage_container_name = azurerm_storage_container.scripts.name
-  type                   = "Block"
-  content_type           = "text/x-powershell"
-  source                 = local.bootstrap_script_path
 }
 
 ############################################################
@@ -186,14 +136,11 @@ resource "azurerm_virtual_machine_extension" "bootstrap_dc" {
   })
 
   protected_settings = jsonencode({
-    storageAccountName = azurerm_storage_account.scripts.name
-    storageAccountKey  = azurerm_storage_account.scripts.primary_access_key
-    fileUris           = [local.bootstrap_blob_url]
-    commandToExecute   = "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ${local.bootstrap_blob_name} -ConfigBase64 \"${local.cse_config_base64}\""
+    fileUris         = [var.bootstrap_script_url]
+    commandToExecute = "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ${var.bootstrap_script_file_name} -ConfigBase64 \"${local.cse_config_base64}\""
   })
 
   depends_on = [
-    azurerm_storage_blob.bootstrap,
     azurerm_windows_virtual_machine.vm
   ]
 }

@@ -15,7 +15,6 @@ locals {
   pip_name            = "pip-jv-${local.project_clean}"
   nsg_name            = "nsg-jv-${local.project_clean}"
 
-  bootstrap_blob_name   = "bootstrap-dc.ps1"
   bootstrap_script_path = "${path.module}/scripts/bootstrap-dc.ps1"
 
   cse_config_base64 = base64encode(jsonencode({
@@ -27,8 +26,13 @@ locals {
     safe_mode_password  = var.safe_mode_password
   }))
 
-  bootstrap_blob_url = "https://${azurerm_storage_account.scripts.name}.blob.core.windows.net/${azurerm_storage_container.scripts.name}/${local.bootstrap_blob_name}"
-
-  # Changing this value causes the Custom Script Extension to run again when the PowerShell script changes.
-  custom_script_extension_timestamp = parseint(substr(sha256(file(local.bootstrap_script_path)), 0, 7), 16)
+  # Changing this value causes the Custom Script Extension to run again when the local script copy,
+  # script URL, or manual version value changes. When using GitHub, publish the updated local script
+  # to the repository and increase bootstrap_script_version when you want to force a rerun.
+  custom_script_extension_timestamp = parseint(substr(sha256(join("|", [
+    var.bootstrap_script_url,
+    var.bootstrap_script_file_name,
+    var.bootstrap_script_version,
+    filemd5(local.bootstrap_script_path)
+  ])), 0, 7), 16)
 }

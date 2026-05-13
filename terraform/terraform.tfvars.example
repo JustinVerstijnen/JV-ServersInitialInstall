@@ -28,10 +28,17 @@ image_offer     = "WindowsServer"
 image_sku       = "2022-datacenter"
 image_version   = "latest"
 
-# Recommended: replace this with your own public IP address and /32.
-# Example: "203.0.113.10/32"
-# Temporary lab-only option: "*"
-rdp_source_address_prefix = "YOUR.PUBLIC.IP.ADDRESS/32"
+# Publish scripts/bootstrap-dc.ps1 to a public GitHub repository and paste the raw URL here.
+# Example format:
+# "https://raw.githubusercontent.com/<owner>/<repo>/main/scripts/bootstrap-dc.ps1"
+bootstrap_script_url       = "https://raw.githubusercontent.com/<owner>/<repo>/main/scripts/bootstrap-dc.ps1"
+bootstrap_script_file_name = "bootstrap-dc.ps1"
+bootstrap_script_version   = "1"
+
+# Recommended: replace these with your own public IP addresses and /32.
+# Example: ["203.0.113.10/32", "203.0.113.11/32"]
+# Temporary lab-only option: ["*"]
+rdp_source_address_prefixes = ["YOUR.PUBLIC.IP.ADDRESS/32"]
 
 time_zone = "W. Europe Standard Time"
 culture   = "nl-NL"
