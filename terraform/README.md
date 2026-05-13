@@ -28,6 +28,7 @@ Based on the `project` variable, Terraform creates resources with this naming co
 ```text
 Resource group: rg-jv-<project>
 VM:             vm-jv-<project>
+Windows name:   vm-jv-<project>
 OS disk:        osdisk-jv-<project>
 VNET:           vnet-jv-<project>
 NIC:            nic-jv-<project>
@@ -46,6 +47,16 @@ Default internal IP:
 ```text
 10.69.0.4
 ```
+
+## Windows computer name
+
+The Windows computer name is configured to match the Azure VM name:
+
+```text
+vm-jv-<project>
+```
+
+Windows computer names have a 15-character limit. Because the prefix `vm-jv-` already uses 6 characters, the `project` variable is limited to 2 through 9 characters.
 
 ## GitHub script hosting
 

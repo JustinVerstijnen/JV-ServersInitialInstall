@@ -8,12 +8,12 @@ variable "subscription_id" {
 }
 
 variable "project" {
-  description = "Project name. Used for naming: rg-jv-project, vm-jv-project, and so on."
+  description = "Project name. Used for naming: rg-jv-project, vm-jv-project, and so on. Keep it short because the Windows computer name will be vm-jv-<project>."
   type        = string
 
   validation {
-    condition     = can(regex("^[a-zA-Z0-9-]{2,20}$", var.project))
-    error_message = "Use only letters, numbers and hyphens. Length: 2 to 20 characters."
+    condition     = can(regex("^[a-zA-Z0-9][a-zA-Z0-9-]{0,7}[a-zA-Z0-9]$", var.project))
+    error_message = "Use 2 to 9 characters. Only letters, numbers and hyphens are allowed. The value cannot start or end with a hyphen. This keeps the Windows computer name within the 15-character limit."
   }
 }
 
