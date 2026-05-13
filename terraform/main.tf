@@ -95,9 +95,9 @@ resource "azurerm_windows_virtual_machine" "vm" {
     azurerm_network_interface.nic.id
   ]
 
-  provision_vm_agent       = true
+  provision_vm_agent        = true
   automatic_updates_enabled = true
-  patch_mode               = "AutomaticByOS"
+  patch_mode                = "AutomaticByOS"
 
   os_disk {
     name                 = local.os_disk_name
