@@ -96,7 +96,7 @@ resource "azurerm_windows_virtual_machine" "vm" {
   ]
 
   provision_vm_agent       = true
-  enable_automatic_updates = true
+  automatic_updates_enabled = true
   patch_mode               = "AutomaticByOS"
 
   os_disk {
